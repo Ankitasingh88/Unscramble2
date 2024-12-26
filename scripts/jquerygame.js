@@ -38,10 +38,7 @@ $ ( () => {
               maxTime--;
                 $timeText.text(maxTime);
         } else {
-           // alert(`Time off! ${correctWord.toUpperCase()} was the correct word`);
-           // let text = "Time off! ${correctWord.toUpperCase()} was the correct word"
-           $resultText.text('Time off! '+ correctWord.toUpperCase() + ' was the correct word');
-           initGame(); // Assuming initGame is defined elsewhere
+           $resultText.text('Time off! '+ correctWord.toUpperCase() + ' was the correct word');  
         }
     }, 1000);
 };
@@ -59,8 +56,11 @@ const initGame = () => {
       [wordArray[i], wordArray[j]] = [wordArray[j], wordArray[i]];
     }
     
+    $resultText.text("")
     $wordText.text(wordArray.join(""));
     $hintText.text(randomObj.hint);
+    $refreshBtn.text("Restart Game");
+    $checkBtn.text("Check");
 
     correctWord = randomObj.word.toLowerCase();
     $inputField.val("").attr("maxlength", correctWord.length);
@@ -71,11 +71,17 @@ const initGame = () => {
 
 const checkWord = () => {
     let userWord = $inputField.val().toLowerCase();
-    if (!userWord) return alert("Please enter the word to check!");
-    if (userWord !== correctWord)
-      return alert(`Oops! ${userWord} is not a correct word`);
-    alert(`Congrats! ${correctWord.toUpperCase()} is the correct word`);
-    initGame();
+    if (!userWord) return $resultText.text("Please enter the word to check!");
+    if (userWord !== correctWord){
+      $inputField.val("").attr("maxlength", correctWord.length);
+      return $resultText.text('Wrong !! Try Again ');
+    }
+    
+    $refreshBtn.text("Play again !!");
+    $resultText.text('Correct !!' + correctWord.toUpperCase() + ' was the right answer');
+    $checkBtn.text("");
+    clearInterval(timer);
+    $timeText.text("");
  };
 
  $refreshBtn.on("click", initGame);
