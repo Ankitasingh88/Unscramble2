@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNSCRAMBLED-GAME</title>
+    <link rel="stylesheet" href="./styles/jquerygame.css">
+    <script src="./scripts/jquery-3.7.1.min.js"></script>
+    <script src="./scripts/jquerygame.js" defer></script>
+</head>
+<body>
+    <div class="overlay">
+        <div class="overlay-text"> Welcome </div>
+        <div class="overlay-text2"> To </div>
+        <div class="overlay-text3"> Unsramble !! </div>
+    </div>
+
+    <div class="container">
+        <h1>UNSCRAMBLE !!</h1>
+            <div class="content">
+                <p class="word"></p>
+                <div class="details">
+                    <p class="hint">Hint: <span></span></p>
+                    <p class="time">Time Left: <span></span></p>
+                </div>
+                <input type="text" spellcheck="false" placeholder="Enter a valid word">
+                <div class="buttons">
+                    <button class="refresh-word">Refresh Word</button>
+                    <button class="check-word">Check Word</button>
+                </div>
+                <p class="result"></p>
+            </div>
+    </div>         
+</body>
+</html>
