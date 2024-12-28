@@ -21,13 +21,16 @@ $ ( () => {
         { word: "binary", hint: "The language of computers consisting of 0s and 1s" },
     ];
 
-       var $wordText = $(".word"),
-       $hintText = $(".hint span"),
-       $timeText = $(".time span"),
-       $inputField = $("input"),
-       $refreshBtn = $(".refresh-word"),
-       $checkBtn = $(".check-word"),
-       $resultText = $(".result");
+    var $wordText = $(".word"),
+        $instructText = $(".instructions span"),
+        $hintText = $(".hint span"),
+        $timeText = $(".time span"),
+        $hint = $(".hint"),
+        $time = $(".time"),
+        $inputField = $("input"),
+        $refreshBtn = $(".refresh-word"),
+        $checkBtn = $(".check-word"),
+        $resultText = $(".result");
 
     let correctWord, timer;
 
@@ -35,56 +38,71 @@ $ ( () => {
        clearInterval(timer);
        timer = setInterval(() => {
           if (maxTime > 0) {
-              maxTime--;
-                $timeText.text(maxTime);
-        } else {
-           $resultText.text('Time off! '+ correctWord.toUpperCase() + ' was the correct word');  
-        }
-    }, 1000);
-};
+              $timeText.text(maxTime);
+              maxTime--;              
+              if (maxTime == 14) {
+                $hint.show();
+              }
+          }
+          else {
+            $timeText.text(maxTime);
+            $resultText.text('Time off! '+ correctWord.toUpperCase() + ' was the correct word');
+            $refreshBtn.text("Play again !!");
+            $checkBtn.hide();
+          }
+        }, 1000);
+    };
 
-const initGame = () => {
-    initTimer(30);
-  
-    // Get a random word object from the words array
-    let randomObj = words[Math.floor(Math.random() * words.length)];
+    const initGame = () => {
+      $instructText.hide();
+      $checkBtn.show();
+      $time.show();
+      $inputField.show();
+      $hint.hide();
+      initTimer(30);
     
-    // Shuffle the letters of the word
-    let wordArray = randomObj.word.split("");
-    for (let i = wordArray.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
-      [wordArray[i], wordArray[j]] = [wordArray[j], wordArray[i]];
-    }
-    
-    $resultText.text("")
-    $wordText.text(wordArray.join(""));
-    $hintText.text(randomObj.hint);
-    $refreshBtn.text("Restart Game");
-    $checkBtn.text("Check");
+      // Get a random word object from the words array
+      let randomObj = words[Math.floor(Math.random() * words.length)];
+      
+      // Shuffle the letters of the word
+      let wordArray = randomObj.word.split("");
+      for (let i = wordArray.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [wordArray[i], wordArray[j]] = [wordArray[j], wordArray[i]];
+      }
+      
+      $resultText.text("")
+      $wordText.text(wordArray.join(""));
+      $hintText.text(randomObj.hint);
+      $refreshBtn.text("Restart Game");
+      $checkBtn.text("Check Word");
 
-    correctWord = randomObj.word.toLowerCase();
-    $inputField.val("").attr("maxlength", correctWord.length);
- };
-  
-  // Initialize the game
-  initGame();
-
-const checkWord = () => {
-    let userWord = $inputField.val().toLowerCase();
-    if (!userWord) return $resultText.text("Please enter the word to check!");
-    if (userWord !== correctWord){
+      correctWord = randomObj.word.toLowerCase();
       $inputField.val("").attr("maxlength", correctWord.length);
-      return $resultText.text('Wrong !! Try Again ');
-    }
-    
-    $refreshBtn.text("Play again !!");
-    $resultText.text('Correct !!' + correctWord.toUpperCase() + ' was the right answer');
-    $checkBtn.text("");
-    clearInterval(timer);
-    $timeText.text("");
- };
+    };
+  
+    const checkWord = () => {
+      let userWord = $inputField.val().toLowerCase();
+      if (!userWord) return $resultText.text("Please enter the word to check!");
 
- $refreshBtn.on("click", initGame);
- $checkBtn.on("click", checkWord);
-
+      if (userWord !== correctWord){
+        $inputField.val("").attr("maxlength", correctWord.length);
+        return $resultText.text('Wrong !! Try Again ');
+      }
+        
+      $refreshBtn.text("Play again !!");
+      $resultText.text('Correct !!' + correctWord.toUpperCase() + ' was the right answer');
+      $checkBtn.hide();
+      clearInterval(timer);
+      $timeText.text("");    
+    };
+ 
+    $instructText.text("You will get 30 seconds to guess the scrambled word. \n You will get a hint when 15 seconds remain")
+    $refreshBtn.text("Start PLaying !!")
+    $refreshBtn.on("click", initGame);
+    $checkBtn.hide();
+    $hint.hide();
+    $time.hide();
+    $inputField.hide();
+    $checkBtn.on("click", checkWord); 
 })
