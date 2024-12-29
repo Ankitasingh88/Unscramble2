@@ -19,6 +19,25 @@ $ ( () => {
         { word: "algorithm", hint: "A step-by-step procedure for solving a problem" },
         { word: "debugger", hint: "A tool used to find and fix errors in code" },
         { word: "binary", hint: "The language of computers consisting of 0s and 1s" },
+        { word: "exception", hint: "An error that occurs during the execution of a program" },
+        { word: "package", hint: "A collection of modules bundled together" },
+        { word: "framework", hint: "A pre-built structure to simplify software development" },
+        { word: "String", hint: "A sequence of characters" },
+        { word: "array", hint: "A collection of elements stored at contiguous memory locations" },
+        { word: "object", hint: "An instance of a class in object-oriented programming" },
+        { word: "caching", hint: "Storing data temporarily for faster retrieval" },
+        { word: "variable", hint: "A placeholder for storing data in programming" },
+        { word: "python", hint: "A popular high-level programming language known for its readability" },
+        { word: "syntax", hint: "The set of rules that define the structure of a programming language" },
+        { word: "gitHub", hint: "A platform for version control and collaborative coding" },
+        { word: "script", hint: "A file containing a sequence of commands to be executed" },
+        { word: "branch", hint: "A parallel version of a repository in version control" },
+        { word: "class", hint: "A blueprint for creating objects in programming" },
+        { word: "compile", hint: "The process of converting code into machine-readable format" },
+        { word: "javascript", hint: "A process to make web pages interactive" },
+        { word: "jquery", hint: "A light weight javascript library" },
+        { word: "boolean", hint: "Represents true or false values in programming" },
+        { word: "iteration", hint: "The process of repeating a set of instructions in a program"},
     ];
 
     var $wordText = $(".word"),
@@ -56,10 +75,11 @@ $ ( () => {
     const initGame = () => {
       $instructText.hide();
       $checkBtn.show();
-      $time.show();
+      $time.hide();
       $inputField.show();
       $hint.hide();
       initTimer(30);
+      $time.show();
     
       // Get a random word object from the words array
       let randomObj = words[Math.floor(Math.random() * words.length)];
