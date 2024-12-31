@@ -5,7 +5,8 @@ $ ( () => {
     $('.overlay-text2').delay(1400).fadeIn(300).delay(300).fadeOut(300);
     $('.overlay-text3').delay(2400).fadeIn(300).delay(300).fadeOut(300);
     $('.overlay').delay(3200).fadeOut(500);
-
+    
+    //Word Bank with hints.
     let words = [
         { word: "addition", hint: "The process of adding numbers" },
         { word: "meeting", hint: "Event in which people come together" },
@@ -40,6 +41,7 @@ $ ( () => {
         { word: "iteration", hint: "The process of repeating a set of instructions in a program"},
     ];
 
+    //Query Selector
     var $wordText = $(".word"),
         $instructText = $(".instructions span"),
         $hintText = $(".hint span"),
@@ -49,10 +51,12 @@ $ ( () => {
         $inputField = $("input"),
         $refreshBtn = $(".refresh-word"),
         $checkBtn = $(".check-word"),
+        $exitBtn = $(".exit"),
         $resultText = $(".result");
 
     let correctWord, timer;
 
+    //Set the timer for Game.
     const initTimer = (maxTime) => {
        clearInterval(timer);
        timer = setInterval(() => {
@@ -64,22 +68,28 @@ $ ( () => {
               }
           }
           else {
+            //Timer Expired.
             $timeText.text(maxTime);
             $resultText.text('Time off! '+ correctWord.toUpperCase() + ' was the correct word');
-            $refreshBtn.text("Play again !!");
+            $refreshBtn.text("New Word !!");
             $checkBtn.hide();
+            clearInterval(timer);
           }
         }, 1000);
     };
 
-    const initGame = () => {
+    //Function To Start The Game.
+    const startGame = () => {
       $instructText.hide();
+      $wordText.show();
       $checkBtn.show();
       $time.hide();
       $inputField.show();
       $hint.hide();
       initTimer(30);
       $time.show();
+      $exitBtn.show();
+      $exitBtn.on("click", exitGame);
     
       // Get a random word object from the words array
       let randomObj = words[Math.floor(Math.random() * words.length)];
@@ -94,13 +104,15 @@ $ ( () => {
       $resultText.text("")
       $wordText.text(wordArray.join(""));
       $hintText.text(randomObj.hint);
-      $refreshBtn.text("Restart Game");
+      $refreshBtn.text("New Word");
       $checkBtn.text("Check Word");
 
       correctWord = randomObj.word.toLowerCase();
       $inputField.val("").attr("maxlength", correctWord.length);
+      $checkBtn.on("click", checkWord); 
     };
-  
+
+   // Compare user guess to selected word
     const checkWord = () => {
       let userWord = $inputField.val().toLowerCase();
       if (!userWord) return $resultText.text("Please enter the word to check!");
@@ -109,20 +121,41 @@ $ ( () => {
         $inputField.val("").attr("maxlength", correctWord.length);
         return $resultText.text('Wrong !! Try Again ');
       }
-        
-      $refreshBtn.text("Play again !!");
+    
+     //Check if user wants to continue.
+      $refreshBtn.text("New Word !!");
       $resultText.text('Correct !!' + correctWord.toUpperCase() + ' was the right answer');
       $checkBtn.hide();
       clearInterval(timer);
       $timeText.text("");    
     };
- 
-    $instructText.text("You will get 30 seconds to guess the scrambled word. \n You will get a hint when 15 seconds remain")
-    $refreshBtn.text("Start PLaying !!")
-    $refreshBtn.on("click", initGame);
+
+   // Instruction to start the game
+   const initGame = () => {
+    $instructText.show();
+    $instructText.text("You will get 30 seconds to guess the scrambled word. \n You will get a hint when 15 seconds remain");
+    $refreshBtn.text("Start PLaying !!");
     $checkBtn.hide();
     $hint.hide();
     $time.hide();
     $inputField.hide();
-    $checkBtn.on("click", checkWord); 
+    $exitBtn.hide();
+    $wordText.hide();
+   };
+
+   const exitGame = () => {
+    $hint.hide();
+    $time.hide();
+    $inputField.hide();
+    $exitBtn.hide();
+    $wordText.hide();
+    $resultText.text("");
+    $instructText.show();
+    $instructText.text("Thanks for playing !!");
+    $refreshBtn.text("Play Again !!");
+    $checkBtn.hide();  
+   };
+
+    initGame();
+    $refreshBtn.on("click", startGame);       
 })
