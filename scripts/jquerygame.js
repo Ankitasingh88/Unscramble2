@@ -46,15 +46,18 @@ $ ( () => {
         $instructText = $(".instructions span"),
         $hintText = $(".hint span"),
         $timeText = $(".time span"),
+        $scoreText = $(".score span"),
         $hint = $(".hint"),
         $time = $(".time"),
+        //$score = $(".score"),
         $inputField = $("input"),
         $refreshBtn = $(".refresh-word"),
         $checkBtn = $(".check-word"),
         $exitBtn = $(".exit"),
-        $resultText = $(".result");
+        $resultText = $(".result");      
 
     let correctWord, timer;
+    let score = 0; //Initialize the score variable
 
     //Set the timer for Game.
     const initTimer = (maxTime) => {
@@ -83,6 +86,7 @@ $ ( () => {
       $instructText.hide();
       $wordText.show();
       $checkBtn.show();
+      $scoreText.show();
       $time.hide();
       $inputField.show();
       $hint.hide();
@@ -90,6 +94,7 @@ $ ( () => {
       $time.show();
       $exitBtn.show();
       $exitBtn.on("click", exitGame);
+
     
       // Get a random word object from the words array
       let randomObj = words[Math.floor(Math.random() * words.length)];
@@ -106,10 +111,11 @@ $ ( () => {
       $hintText.text(randomObj.hint);
       $refreshBtn.text("New Word");
       $checkBtn.text("Check Word");
+      $scoreText.text(`Score: ${score}`);
+      
 
       correctWord = randomObj.word.toLowerCase();
       $inputField.val("").attr("maxlength", correctWord.length);
-      $checkBtn.on("click", checkWord); 
     };
 
    // Compare user guess to selected word
@@ -122,16 +128,23 @@ $ ( () => {
         return $resultText.text('Wrong !! Try Again ');
       }
     
+    // Increment score if answer is correct.
+    
+     score += 1;
+     $scoreText.text(`Score: ${score}`);     
+
      //Check if user wants to continue.
       $refreshBtn.text("New Word !!");
       $resultText.text('Correct !!' + correctWord.toUpperCase() + ' was the right answer');
       $checkBtn.hide();
       clearInterval(timer);
-      $timeText.text("");    
-    };
-
+      $timeText.text(""); 
+   };     
+  
    // Instruction to start the game
    const initGame = () => {
+    score = 0; //reset score
+    $scoreText.hide();
     $instructText.show();
     $instructText.text("You will get 30 seconds to guess the scrambled word. \n You will get a hint when 15 seconds remain");
     $refreshBtn.text("Start PLaying !!");
@@ -153,9 +166,11 @@ $ ( () => {
     $instructText.show();
     $instructText.text("Thanks for playing !!");
     $refreshBtn.text("Play Again !!");
-    $checkBtn.hide();  
+    $checkBtn.hide(); 
+    score = 0; 
    };
 
     initGame();
     $refreshBtn.on("click", startGame);       
+    $checkBtn.on("click", checkWord);
 })
